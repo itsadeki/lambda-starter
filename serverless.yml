@@ -1,0 +1,31 @@
+service: demo-serverless
+
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: eu-west-3
+
+package:
+  include:
+    - dist/**
+  exclude:
+    - tsconfig.json
+    - package-lock.json
+    - yarn.lock
+    - src/**
+
+functions:
+  api:
+    handler: dist/functions/api.handler
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
+      - http:
+          path: /{proxy}
+          method: any
+          cors: true
